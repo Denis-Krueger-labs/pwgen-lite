@@ -54,6 +54,20 @@ If it complains it can’t find `pwgen`, run:
 python -m pytest
 ```
 
+## RNG Modes
+
+- **secrets (default)**: uses Python's `secrets` module (recommended for real passwords)
+- **hmac**: educational HMAC-SHA256 based generator (deterministic when a seed is provided)
+
+Examples:
+
+```bash
+python3 pwgen.py 16
+python3 pwgen.py 16 --symbols
+python3 pwgen.py 16 --mode hmac
+python3 pwgen.py 16 --mode hmac --seed-hex <64-hex-chars>
+```
+
 
 ## Goals
 
