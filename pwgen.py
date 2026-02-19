@@ -88,8 +88,9 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="Generate a secure random password.")
 
     parser.add_argument("length", type=int, help="Length of the password (positive integer)")
+    """parser.add_argument("--count", type=int, default=1, help="Number of passwords to generate")"""
     parser.add_argument("--symbols", action="store_true", help="Include symbols in the password")
-    parser.add_argument("--exclude-ambigous", action="store_true", help="Exclude ambiguous characters (O,0,l,I,1)")
+    parser.add_argument("--exclude-ambiguous", action="store_true", help="Exclude ambiguous characters (O,0,l,I,1)")
     parser.add_argument("--mode", choices=["secrets", "hmac"], default="secrets", help="RNG mode: secrets (recommended) or hmac (educational)")
     parser.add_argument("--seed-hex", default=None, help="(hmac mode) 32-byte seed as 64 hex characters. If omitted, a random seed is used.")
     return parser.parse_args()                    
