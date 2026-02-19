@@ -3,6 +3,8 @@ pwgen-lite
 Minimalistic password generator in Python.
 
 """
+
+import argparse
 import secrets
 import string
 
@@ -10,39 +12,38 @@ import string
 BASE_ALPHABET = string.ascii_letters + string.digits
 SYMBOLS = "!@#$%^&*()-_=+[]{}|;:,.<>?/~`"
 
-def generate_password(length: int, use_symbols: bool) -> str:
+def generate_password(length: int, use_symbols: bool, exclude_ambiguous: bool) -> str:
     """
     Generate a password of given length using secure randomness
     """
     
-    alphabet = BASE_ALPHABET
-
-    if use_symbols:
-        alphabet += SYMBOLS
+    alphabet = BASE_ALPHABET + (SYMBOLS if use_symbols else "")
+    for ch in"O0Il1":
+        alphabet = alphabet.replace(ch, "") 
 
     return "".join(secrets.choice(alphabet) for _ in range(length))
 
+def parse_arguments():
+    """
+    Parse command-line arguments.
+    """
+
+    parser = argparse.ArgumentParser(description="Generate a secure random password.")
+
+    parser.add_argument("length", type=int, help="Length of the password (positive integer)")
+    parser.add_argument("--symbols", action="store_true", help="Include symbols in the password")
+    parser.add_argument("--exclude-ambigous", action="store_true", help="Exclude ambiguous characters (O,0,l,I,1)")
+    return parser.parse_args()                    
 
 def main():
-    raw = input("Enter password length: ").strip()
+    args = parse_arguments()
 
-    if not raw.isdigit():
-        print("Invalid input. Please enter a valid positive number. ")
+    if args.length <= 0:
+        print("Error: Length must be a positive integer.")
         return
     
-    length = int(raw)
-
-    if length <= 0:
-        print("Length must be greater then 0.")
-        return 
+    print(generate_password(args.length, args.symbols, args.exclude_ambigous))
     
-    symbol_choice = input("Include symbols? (y/n):").strip().lower()
-    use_symbols = symbol_choice == 'y'
-
-
-    password = generate_password(length, use_symbols)
-    print("Generated password:", password)
-
     
 if __name__ == "__main__":
     main()
